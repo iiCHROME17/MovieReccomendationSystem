@@ -1,6 +1,23 @@
 import pandas as pd 
 import os
 
+class GenreList:
+    def __init__(self, genre_dicts):
+        # genre_dicts: list of dicts, e.g., [{'id': 35, 'name': 'Comedy'}]
+        self.names = [d['name'] for d in genre_dicts if isinstance(d, dict) and 'name' in d]
+
+    def __str__(self):
+        return ', '.join(self.names)
+
+
+class KeywordList:
+    def __init__(self, keyword_dicts):
+        # keyword_dicts: list of dicts, e.g., [{'id': 1, 'name': 'love'}]
+        self.names = [d['name'] for d in keyword_dicts if isinstance(d, dict) and 'name' in d]
+
+    def __str__(self):
+        return ', '.join(self.names)
+
 class DataProcessor:
     def __init__(self,path,version):
         """
@@ -51,7 +68,16 @@ class DataProcessor:
         if self.df is not None:
             for field in fields:
                 if field in self.df.columns:
-                    self.df[field] = self.df[field].apply(lambda x: ast.literal_eval(x) if pd.notnull(x) else [])
+                    if field == 'genres':
+                        self.df[field] = self.df[field].apply(
+                            lambda x: GenreList(ast.literal_eval(x)) if pd.notnull(x) else GenreList([])
+                        )
+                    elif field == 'keywords':
+                        self.df[field] = self.df[field].apply(
+                            lambda x: KeywordList(ast.literal_eval(x)) if pd.notnull(x) else KeywordList([])
+                        )
+                    else:
+                        self.df[field] = self.df[field].apply(lambda x: ast.literal_eval(x) if pd.notnull(x) else [])
 
     def save(self):
         """Save the processed DataFrame to the appropriate path based on version."""
