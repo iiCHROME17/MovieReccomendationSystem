@@ -1,35 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Box, SimpleGrid, Heading } from '@chakra-ui/react';
+import MovieCard from './components/MovieCard';
+
+// Example movie data (replace with real data or fetch from backend)
+const movies = [
+  { title: 'Avatar' },
+  { title: 'Inception' },
+  { title: 'The Dark Knight' },
+  { title: 'Interstellar' },
+  { title: 'The Matrix' },
+  // ...add more or map from your data
+];
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Box bg="gray.900" minH="100vh" p={8}>
+      <Heading color="red.500" mb={8} textAlign="center" fontFamily="sans-serif">
+        iWatchMovies
+      </Heading>
+      <SimpleGrid columns={[1, 2, 3, 5]} spacing={6}>
+        {movies.map((movie, idx) => (
+          <MovieCard key={idx} title={movie.title} />
+        ))}
+      </SimpleGrid>
+    </Box>
+  );
 }
 
-export default App
+export default App;
